@@ -18,14 +18,26 @@ export default function DriverStandings() {
   const [standings, setStandings] = useState([]);
   const [lastUpdated, setLastUpdated] = useState('');
   const [hovered, setHovered] = useState(null);
+  const [error, setError] = useState('');
 
   useEffect(() => {
-    fetch('/driver-standings.json')
-      .then((res) => res.json())
-      .then((data) => {
-        setStandings(data.drivers);
-        setLastUpdated(data.last_updated);
-      });
+    const fetchData = async () => {
+      try {
+        const response = await fetch('https://f1-live-pulse.p.rapidapi.com/driverStandings', {
+          headers: {
+            'x-rapidapi-host': 'f1-live-pulse.p.rapidapi.com',
+            'x-rapidapi-key': import.meta.env.VITE_RAPIDAPI_KEY,
+          },
+        });
+        if (!response.ok) throw new Error('Failed to fetch driver standings');
+        const data = await response.json();
+        setStandings(data.drivers || []);
+        setLastUpdated(data.last_updated || '');
+      } catch (err) {
+        setError('Could not load driver standings.');
+      }
+    };
+    fetchData();
   }, []);
 
   // Find the max points for the progress bar
@@ -34,6 +46,9 @@ export default function DriverStandings() {
   return (
     <div className="container" style={{ padding: 24 }}>
       <h1 className="title is-2 has-text-centered">F1 Driver Standings 2025</h1>
+      {error && (
+        <div className="notification is-danger is-light has-text-centered">{error}</div>
+      )}
       <table className="table is-striped is-hoverable is-fullwidth">
         <thead>
           <tr>
