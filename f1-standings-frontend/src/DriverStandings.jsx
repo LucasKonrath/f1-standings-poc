@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 export default function DriverStandings() {
   const [standings, setStandings] = useState([]);
   const [lastUpdated, setLastUpdated] = useState('');
+  const [hovered, setHovered] = useState(null);
 
   useEffect(() => {
     fetch('/driver-standings.json')
@@ -27,7 +28,12 @@ export default function DriverStandings() {
         </thead>
         <tbody>
           {standings.map((driver) => (
-            <tr key={driver.driverStats}>
+            <tr
+              key={driver.driverStats}
+              className={hovered === driver.driverStats ? 'is-selected' : ''}
+              onMouseEnter={() => setHovered(driver.driverStats)}
+              onMouseLeave={() => setHovered(null)}
+            >
               <td>{driver.position}</td>
               <td>{driver.name}</td>
               <td>{driver.team}</td>
