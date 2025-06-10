@@ -14,9 +14,9 @@ export default function DriverStandings() {
   }, []);
 
   return (
-    <div style={{ padding: 24, fontFamily: 'sans-serif' }}>
-      <h1>F1 Driver Standings 2025</h1>
-      <table border="1" cellPadding="8" style={{ borderCollapse: 'collapse', width: '100%' }}>
+    <div className="container" style={{ padding: 24 }}>
+      <h1 className="title is-2 has-text-centered">F1 Driver Standings 2025</h1>
+      <table className="table is-striped is-hoverable is-fullwidth">
         <thead>
           <tr>
             <th>Position</th>
@@ -36,7 +36,7 @@ export default function DriverStandings() {
           ))}
         </tbody>
       </table>
-      <div style={{ marginTop: 16, color: '#888' }}>
+      <div className="has-text-grey has-text-right" style={{ marginTop: 16 }}>
         Last updated: {lastUpdated ? new Date(lastUpdated).toLocaleString() : 'Loading...'}
       </div>
     </div>
